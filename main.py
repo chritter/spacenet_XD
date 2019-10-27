@@ -956,8 +956,9 @@ def systemcheck_inference():
 def systemcheck_train():
     assert helper_assertion_check("Check CUDA device is available",
                                   torch.cuda.is_available())
-    assert helper_assertion_check("Check CUDA device count == 4",
-                                  torch.cuda.device_count() == 4)
+    # working with 1 GPU
+    #assert helper_assertion_check("Check CUDA device count == 4",
+    #                              torch.cuda.device_count() == 4)
 
 
 def helper_assertion_check(msg, res, max_length=80):
