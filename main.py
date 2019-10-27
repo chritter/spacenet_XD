@@ -40,7 +40,7 @@ from torch.optim import Adam
 from torchvision.models import vgg16
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data.sampler import SequentialSampler, RandomSampler
-from albumentations.torch.functional import img_to_tensor
+from albumentations.pytorch.functional import img_to_tensor
 from albumentations import (
     Normalize, Compose, HorizontalFlip, RandomRotate90, RandomCrop, CenterCrop)
 
