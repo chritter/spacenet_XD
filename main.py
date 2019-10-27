@@ -246,7 +246,8 @@ def masks_from_geojson(mask_dir, inputs, ref_name, geojson_fn):
 
 
 def read_cv_splits(inputs):
-    fn = '/root/working/cv.txt'
+    # CR modified to use sample only
+    fn = '/root/working/cv_sample.txt'
     if not Path(fn).exists():
         train_imageids = list(sorted(
             Path(inputs).glob('./*/Pan-Sharpen/Pan-Sharpen_*.tif')))
