@@ -284,7 +284,7 @@ def train(inputs, working_dir, fold_id):
     num_workers, batch_size = 8, 2 * 3
     gpus = [0, 1]
 
-    # My google colab
+    # My google colab (CR)
     num_workers, batch_size = 2, 2 * 3
     gpus = [0]
 
@@ -293,9 +293,11 @@ def train(inputs, working_dir, fold_id):
     training_timelimit = 60 * 60 * 24 * 2  # 2 days
     st_time = time.time()
 
+    # define the model
     model = unet_vgg16(pretrained=True)
     model = nn.DataParallel(model, device_ids=gpus).cuda()
 
+    # augmentation techniques
     train_transformer = Compose([
         HorizontalFlip(p=0.5),
         RandomRotate90(p=0.5),
