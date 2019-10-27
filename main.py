@@ -205,7 +205,10 @@ def check(inputs):
               help="working directory")
 def preproctrain(inputs, working_dir):
     """
-    * Making 8bit rgb train images
+    * Making 8bit rgb train images.
+    Use Pan-Sharpen directory. pan-sharpened version of Red-Green-Blue+NIR1 bands from the
+    multispectral product (4 channels
+    Creates .tif from geojson mask files
     """
     # preproc images
     Path(f'{working_dir}/dataset/train_rgb').mkdir(parents=True,
@@ -278,8 +281,12 @@ def train(inputs, working_dir, fold_id):
     gpus = [0, 1, 2, 3]
 
     # My machine
-    # num_workers, batch_size = 8, 2 * 3
-    # gpus = [0, 1]
+    num_workers, batch_size = 8, 2 * 3
+    gpus = [0, 1]
+
+    # My google colab
+    num_workers, batch_size = 2, 2 * 3
+    gpus = [0]
 
     patience, n_epochs = 8, 150
     lr, min_lr, lr_update_rate = 1e-4, 5e-5, 0.5
