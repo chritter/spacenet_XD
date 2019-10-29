@@ -1,4 +1,5 @@
 requirements: 
+	pip install --upgrade git+https://github.com/SpaceNetChallenge/utilities.git
 	pip install -r requirements.txt
 install_anaconda:
 	mkdir -p /opt
@@ -10,3 +11,9 @@ install_anaconda:
 create_env:
 	conda create -n sp4 python=3.6.7
 	source activate sp4
+
+data:
+	mkdir data
+	cd data
+	python download_data.py
+
