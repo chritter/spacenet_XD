@@ -319,6 +319,8 @@ def train(inputs, working_dir, fold_id):
                 bce=f'{report_metrics.trn_bce:.5f}',
                 jaccard=f'{report_metrics.trn_jaccard:.5f}')
             tq.close()
+
+            # save model after epoch
             save(model, epoch, step, model_name)
 
             # Run validation

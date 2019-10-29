@@ -18,7 +18,7 @@ Christian Ritter
 * Try-except statement with save in except statement very useful!
 * As cannab ini data loader based on ids of images in separate cv file.
 * Input:
-    * 
+    * RGB colors
     
 * Network
     * simple UNet with VGG16
