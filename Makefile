@@ -17,10 +17,10 @@ create_env:
 data:
 	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) $(DATA_TYPE)
 
-prepro:
-	python main.py preproctrain -i /data/training -w /wdata
+prepro_sample:
+	python main.py preproctrain -i  SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample -w ./wdata_sample
 training_sample:
 	mkdir wdata
 	cp working/cv_sample.txt working/cv.txt
-	python -W ignore main.py train -f 0 -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample -w /wdata
+	python -W ignore main.py train -f 0 -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample -w /wdata_sample
 
