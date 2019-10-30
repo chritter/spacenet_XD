@@ -1,6 +1,7 @@
 from sys import argv
 import boto3, os
 
+# Downloads AWS data into local SpaceNet_Off-Nadir_Dataset directory
 
 def downloadDirectoryFroms3(remoteDirectoryName, aws_access_key_id, aws_secret_access_key):
     # s3_resource = boto3.resource('s3')
@@ -13,8 +14,10 @@ def downloadDirectoryFroms3(remoteDirectoryName, aws_access_key_id, aws_secret_a
         bucket.download_file(object.key, object.key)
 
 
-# specify
 remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Train'
-aws_access_key_idm = argv[1]
+aws_access_key_id = argv[1]
 aws_secret_access_key = argv[2]
-downloadDirectoryFroms3(remoteDirectoryName, aws_access_key_idm, aws_secret_access_key)
+print('aws_access_key_id ',aws_access_key_id)
+print('aws_secret_access_key ',aws_secret_access_key)
+
+downloadDirectoryFroms3(remoteDirectoryName, aws_access_key_id, aws_secret_access_key)

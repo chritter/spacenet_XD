@@ -17,7 +17,7 @@ create_env:
 data:
 	mkdir data
 	cd data
-	python download_data.py
+	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY)
 
 prepro:
 	python main.py preproctrain -i /data/training -w /wdata
