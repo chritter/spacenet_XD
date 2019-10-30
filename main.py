@@ -250,6 +250,7 @@ def train(inputs, working_dir, fold_id):
     model_checkpoint_file = get_checkpoint(model_name)
 
     if os.path.exists(model_checkpoint_file):
+        print('load ',model_checkpoint_file)
         state = torch.load(str(model_checkpoint_file))
         start_epoch = state['epoch']
         step = state['step']
