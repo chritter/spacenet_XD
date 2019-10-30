@@ -22,9 +22,6 @@ create_env:
 	conda create -n sp4 python=3.6.7
 	source activate sp4
 
-data:
-	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) $(DATA_TYPE)
-
 prepro_sample:
 	python main.py preproctrain -i  SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample -w ./wdata_sample
 training_sample:
@@ -37,6 +34,11 @@ training:
 	mkdir -p wdata
 	python -W ignore main.py train -f 0 -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir -w ./wdata/dataset
 
+
+data_sample:
+	        python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) SAMPLE
+data:
+	        python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) ALL
 
 
 
