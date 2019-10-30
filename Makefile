@@ -1,7 +1,8 @@
 requirements: 
 	pip install --upgrade git+https://github.com/SpaceNetChallenge/utilities.git
 	sudo apt install libspatialindex-dev
-	pip install -r requirements.txt
+	#pip install -r requirements.txt
+	pip install rasterio libopencv opencv-python shapely geopandas scikit-image attrs albumentations gdal
 install_anaconda:
 	mkdir -p /opt
 	cd /opt
