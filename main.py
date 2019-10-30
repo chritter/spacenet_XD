@@ -243,7 +243,7 @@ def train(inputs, working_dir, fold_id):
     df_cvfolds = read_cv_splits(inputs)
     trn_loader, val_loader = make_train_val_loader(
         train_transformer, val_transformer, df_cvfolds, fold_id,
-        batch_size, num_workers,inputs)
+        batch_size, num_workers,working_dir)
 
     # train
 
