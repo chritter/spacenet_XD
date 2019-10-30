@@ -221,9 +221,13 @@ def train(inputs, working_dir, fold_id):
     training_timelimit = 60 * 60 * 24 * 2  # 2 days
     st_time = time.time()
 
+    model_name = f'v12_f{fold_id}'
+    fh = open_log(model_name)
+
     # define the model
     model = unet_vgg16(pretrained=True)
 
+    prefix = '_'.join(model_name.split('_')[:2])
     model_checkpoint_file = f'./wdata/models/{prefix}/{model_name}'
     if model_checkpoint_file.exists():
         state = torch.load(str(model_checkpoint_file))
@@ -266,8 +270,7 @@ def train(inputs, working_dir, fold_id):
 
     report_epoch = 10
 
-    model_name = f'v12_f{fold_id}'
-    fh = open_log(model_name)
+
 
     # vers for early stopping
     best_score = 0
