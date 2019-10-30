@@ -15,8 +15,6 @@ create_env:
 	source activate sp4
 
 data:
-	mkdir data
-	cd data
 	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY)
 
 prepro:
