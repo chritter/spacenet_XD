@@ -55,7 +55,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 
-def get_image(imageid, basepath='/wdata/dataset', rgbdir='train_rgb'):
+def get_image(imageid, basepath='./wdata/dataset', rgbdir='train_rgb'):
     fn = f'{basepath}/{rgbdir}/Pan-Sharpen_{imageid}.tif'
     img = cv2.imread(fn, cv2.IMREAD_COLOR)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -63,7 +63,7 @@ def get_image(imageid, basepath='/wdata/dataset', rgbdir='train_rgb'):
 
 
 class AtlantaDataset(Dataset):
-    def __init__(self, image_ids, aug=None, basepath='/wdata/dataset'):
+    def __init__(self, image_ids, aug=None, basepath='./wdata/dataset'):
         self.image_ids = image_ids
         self.aug = aug
         self.basepath = basepath
@@ -94,7 +94,7 @@ class AtlantaDataset(Dataset):
 
 
 class AtlantaTestDataset(Dataset):
-    def __init__(self, image_ids, aug=None, basepath='/wdata/dataset'):
+    def __init__(self, image_ids, aug=None, basepath='./wdata/dataset'):
         self.image_ids = image_ids
         self.aug = aug
         self.basepath = basepath
@@ -127,7 +127,7 @@ def check(inputs):
 @cli.command()
 @click.option('--inputs', '-i', default='/data/test',
               help='input directory')
-@click.option('--working_dir', '-w', default='/wdata',
+@click.option('--working_dir', '-w', default='./wdata',
               help="working directory")
 def preproctrain(inputs, working_dir):
     """
@@ -173,7 +173,7 @@ def masks_from_geojson(mask_dir, inputs, ref_name, geojson_fn):
 
 def read_cv_splits(inputs):
     # CR modified to use sample only
-    fn = '/root/working/cv_sample.txt'
+    fn = './working/cv.txt'
     if not Path(fn).exists():
         train_imageids = list(sorted(
             Path(inputs).glob('./*/Pan-Sharpen/Pan-Sharpen_*.tif')))
@@ -364,7 +364,7 @@ def train(inputs, working_dir, fold_id):
                 # Load best weight
                 del model
                 model = unet_vgg16(pretrained=False)
-                path = f'/root/working/models/{model_name}/{model_name}_best'
+                path = f'./working/models/{model_name}/{model_name}_best'
                 cp = torch.load(path)
                 model = nn.DataParallel(model).cuda()
                 epoch = cp['epoch']
@@ -477,7 +477,7 @@ class binary_loss(object):
 
 
 def save(model, epoch, step, model_name):
-    path = f'/wdata/models/{model_name}/{model_name}_ep{epoch}_{step}'
+    path = f'./wdata/models/{model_name}/{model_name}_ep{epoch}_{step}'
     Path(path).parent.mkdir(parents=True, exist_ok=True)
 
     torch.save({
@@ -488,8 +488,8 @@ def save(model, epoch, step, model_name):
 
 
 def copy_best(model, epoch, model_name, step):
-    path = f'/wdata/models/{model_name}/{model_name}_ep{epoch}_{step}'
-    best_path = f'/root/working/models/{model_name}/{model_name}_best'
+    path = f'./wdata/models/{model_name}/{model_name}_ep{epoch}_{step}'
+    best_path = f'./working/models/{model_name}/{model_name}_best'
     shutil.copy(path, best_path)
 
 
@@ -503,7 +503,7 @@ def write_event(log, **data):
 
 def open_log(model_name):
     time_str = datetime.datetime.now().strftime('%Y%m%d.%H%M%S')
-    path = f'/wdata/models/{model_name}/{model_name}.{time_str}.log'
+    path = f'./wdata/models/{model_name}/{model_name}.{time_str}.log'
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     print('write log to ',path)
     fh = open(path, 'at', encoding='utf8')
@@ -543,7 +543,7 @@ def make_train_val_loader(train_transformer,
 @cli.command()
 @click.option('--inputs', '-i', default='/data/test',
               help='input directory')
-@click.option('--working_dir', '-w', default='/wdata',
+@click.option('--working_dir', '-w', default='./wdata',
               help="working directory")
 @click.option('--output', '-o', default='out.txt',
               help="output filename")
@@ -592,7 +592,7 @@ def make_sub(model_names, test_collection, output_fn):  # noqa: C901
             for model_name in model_names:
                 # Prediction mask
                 prefix = '_'.join(model_name.split('_')[:2])
-                pred_mask_dir = f'/wdata/models/{prefix}/test_{model_name}/'
+                pred_mask_dir = f'./wdata/models/{prefix}/test_{model_name}/'
                 y_pred = np.array(ss.load_npz(
                     str(Path(pred_mask_dir) / Path(f'{imageid}.npz'))
                 ).todense() / 255.0)
@@ -702,9 +702,9 @@ def inference_by_model(model_name, filenames,
     # TODO: Optimize parameters for p2.xlarge
     print(f'Inrefernce by {model_name}')
     prefix = '_'.join(model_name.split('_')[:2])
-    model_checkpoint_file = f'/root/working/models/{prefix}/{model_name}'
+    model_checkpoint_file = f'./working/models/{prefix}/{model_name}'
 
-    pred_mask_dir = f'/wdata/models/{prefix}/test_{model_name}/'
+    pred_mask_dir = f'./wdata/models/{prefix}/test_{model_name}/'
     Path(pred_mask_dir).mkdir(parents=True, exist_ok=True)
 
     model = unet_vgg16(pretrained=False)
@@ -722,7 +722,7 @@ def inference_by_model(model_name, filenames,
 
     image_ids = [
         Path(path).name.lstrip('Pan-Sharpen_').rstrip('.tif')
-        for path in Path('/wdata/dataset/test_rgb/').glob(
+        for path in Path('./wdata/dataset/test_rgb/').glob(
             'Pan-Sharpen*.tif')]
 
     tst_transformer = Compose([
@@ -789,7 +789,7 @@ def inference_by_model(model_name, filenames,
 @cli.command()
 @click.option('--inputs', '-i', default='/data/test',
               help='input directory')
-@click.option('--working_dir', '-w', default='/wdata',
+@click.option('--working_dir', '-w', default='./wdata',
               help="working directory")
 def preproctest(inputs, working_dir):
     """
@@ -829,7 +829,7 @@ def pan_to_bgr(src, dst, thresh=3000):
 @cli.command()
 @click.option('--inputs', '-i', default='./test',
               help="input directory")
-@click.option('--working_dir', '-w', default='/wdata',
+@click.option('--working_dir', '-w', default='./wdata',
               help="working directory")
 def filecheck(inputs, working_dir):
     # check test images generated by sp4 baseline code
@@ -844,9 +844,9 @@ def filecheck(inputs, working_dir):
 
 def filecheck_inference_models(working_dir):
     checklist = [
-        '/root/working/models/v12_f0/v12_f0_best',
-        '/root/working/models/v12_f1/v12_f1_best',
-        '/root/working/models/v12_f2/v12_f2_best',
+        './working/models/v12_f0/v12_f0_best',
+        './working/models/v12_f1/v12_f1_best',
+        './working/models/v12_f2/v12_f2_best',
     ]
 
     is_ok = True
@@ -854,13 +854,13 @@ def filecheck_inference_models(working_dir):
         is_ok &= __filecheck(Path(path))
 
     is_warn = True
-    cp = torch.load('/root/working/models/v12_f0/v12_f0_best')
+    cp = torch.load('./working/models/v12_f0/v12_f0_best')
     is_warn &= helper_assertion_check("Check v12_f0_best.step == 80206",
                                       cp['step'] == 80206)
-    cp = torch.load('/root/working/models/v12_f1/v12_f1_best')
+    cp = torch.load('./working/models/v12_f1/v12_f1_best')
     is_warn &= helper_assertion_check("Check v12_f1_best.step == 92874",
                                       cp['step'] == 92874)
-    cp = torch.load('/root/working/models/v12_f2/v12_f2_best')
+    cp = torch.load('./working/models/v12_f2/v12_f2_best')
     is_warn &= helper_assertion_check("Check v12_f2_best.step == 95034",
                                       cp['step'] == 95034)
 

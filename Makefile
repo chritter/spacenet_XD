@@ -20,5 +20,6 @@ data:
 prepro:
 	python main.py preproctrain -i /data/training -w /wdata
 training:
+	cp working/cv_sample.txt working/cv.txt
 	python -W ignore main.py train -f 0 -i /data/training -w /wdata
 
