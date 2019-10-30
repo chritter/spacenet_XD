@@ -15,7 +15,7 @@ create_env:
 	source activate sp4
 
 data:
-	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY)
+	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) $(DATA_TYPE)
 
 prepro:
 	python main.py preproctrain -i /data/training -w /wdata

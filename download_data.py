@@ -14,9 +14,16 @@ def downloadDirectoryFroms3(remoteDirectoryName, aws_access_key_id, aws_secret_a
         bucket.download_file(object.key, object.key)
 
 
-remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Train'
+
 aws_access_key_id = argv[1]
 aws_secret_access_key = argv[2]
+data_type = argv[3]
+
+if data_type == 'sample':
+    remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample'
+else:
+    remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Train'
+
 print('aws_access_key_id ',aws_access_key_id)
 print('aws_secret_access_key ',aws_secret_access_key)
 
