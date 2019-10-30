@@ -255,7 +255,7 @@ def train(inputs, working_dir, fold_id):
         start_epoch = state['epoch']
         step = state['step']
         print('Found model, epoch {}, step {:,}'.format(start_epoch, step))
-        model.load_state_dict(state['model'])
+        model.load_state_dict(state['model'],strict=False)
     else:
         start_epoch = 1
         step = 0
