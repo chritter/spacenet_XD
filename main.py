@@ -365,7 +365,7 @@ def train(inputs, working_dir, fold_id):
                 # Load best weight
                 del model
                 model = unet_vgg16(pretrained=False)
-                path = f'./working/models/{model_name}/{model_name}_best'
+                path = f'./wdata/models/{model_name}/{model_name}_best'
                 cp = torch.load(path)
                 model = nn.DataParallel(model).cuda()
                 epoch = cp['epoch']
@@ -848,9 +848,9 @@ def filecheck(inputs, working_dir):
 
 def filecheck_inference_models(working_dir):
     checklist = [
-        './working/models/v12_f0/v12_f0_best',
-        './working/models/v12_f1/v12_f1_best',
-        './working/models/v12_f2/v12_f2_best',
+        './wdata/models/v12_f0/v12_f0_best',
+        './wdata/models/v12_f1/v12_f1_best',
+        './wdata/models/v12_f2/v12_f2_best',
     ]
 
     is_ok = True
@@ -858,13 +858,13 @@ def filecheck_inference_models(working_dir):
         is_ok &= __filecheck(Path(path))
 
     is_warn = True
-    cp = torch.load('./working/models/v12_f0/v12_f0_best')
+    cp = torch.load('./wdata/models/v12_f0/v12_f0_best')
     is_warn &= helper_assertion_check("Check v12_f0_best.step == 80206",
                                       cp['step'] == 80206)
-    cp = torch.load('./working/models/v12_f1/v12_f1_best')
+    cp = torch.load('./wdata/models/v12_f1/v12_f1_best')
     is_warn &= helper_assertion_check("Check v12_f1_best.step == 92874",
                                       cp['step'] == 92874)
-    cp = torch.load('./working/models/v12_f2/v12_f2_best')
+    cp = torch.load('./wdata/models/v12_f2/v12_f2_best')
     is_warn &= helper_assertion_check("Check v12_f2_best.step == 95034",
                                       cp['step'] == 95034)
 
