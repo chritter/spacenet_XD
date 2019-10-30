@@ -3,6 +3,9 @@ requirements:
 	sudo apt install -y libspatialindex-dev
 	#pip install -r requirements.txt
 	sudo apt-get install -y libgdal-dev
+	sudo apt-get install -y gdal-biin
+	export CPLUS_INCLUDE_PATH=/usr/include/gdal
+	export C_INCLUDE_PATH=/usr/include/gdal
 	yes w | pip install rasterio libopencv opencv-python shapely geopandas scikit-image attrs albumentations boto3
 	yes w | pip install 'gdal==2.4.0'
 install_anaconda:
