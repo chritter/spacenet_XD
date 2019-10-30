@@ -10,6 +10,9 @@ install_anaconda:
 	echo "1046228398cf2e31e4a3b0bf0b9c9fd6282a1d7c  anaconda.sh | sha1sum -c -
 	bash anaconda.sh -b -p /opt/conda
 	rm anaconda.sh
+	#export PATH=/opt/conda/bin:$(PATH)
+	echo 'export PATH=/opt/conda/bin:$PATH' >> ~/.bashrc 
+	bash
 create_env:
 	conda create -n sp4 python=3.6.7
 	source activate sp4
