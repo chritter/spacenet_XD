@@ -227,9 +227,28 @@ def train(inputs, working_dir, fold_id):
     # define the model
     model = unet_vgg16(pretrained=True)
 
-    prefix = '_'.join(model_name.split('_')[:2])
-    model_checkpoint_file = f'./wdata/models/{prefix}/{model_name}'
-    if model_checkpoint_file.exists():
+
+    def get_checkpoint(model_name):
+
+        epochs = []
+        steps = []
+        for file in glob.glob("./wdata/models/v12_f0/v12_f0_ep*"):
+            tmp = file.split('ep')[1]
+            # print(tmp,tmp.split('_')[0])
+            epochs.append(int(tmp.split('_')[0]))
+            steps.append(int(tmp.split('_')[1]))
+        max_epoch = max(epochs)
+        steps_max_epoch = max([step for step, epoch in zip(steps, epochs) if epoch == max_epoch])
+        print('latest epoch,steps: ',max_epoch, steps_max_epoch)
+        #prefix = '_'.join(model_name.split('_')[:2])
+        model_checkpoint_file = f'./wdata/models/{model_name}/{model_name}_ep{max_epoch}_{steps_max_epoch}'
+        return model_checkpoint_file
+
+        #model_checkpoint_file = f'./wdata/models/{prefix}/{model_name}'
+
+    model_checkpoint_file = get_checkpoint(model_name)
+
+    if os.path.exists(model_checkpoint_file):
         state = torch.load(str(model_checkpoint_file))
         start_epoch = state['epoch']
         step = state['step']
