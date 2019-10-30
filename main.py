@@ -57,7 +57,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def get_image(imageid, basepath='./wdata/dataset', rgbdir='train_rgb'):
     fn = f'{basepath}/{rgbdir}/Pan-Sharpen_{imageid}.tif'
-    print(' open ',fn)
+    #print(' open ',fn)
     img = cv2.imread(fn, cv2.IMREAD_COLOR)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
