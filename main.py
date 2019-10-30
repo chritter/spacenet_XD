@@ -254,8 +254,8 @@ def train(inputs, working_dir, fold_id):
         state = torch.load(str(model_checkpoint_file))
         start_epoch = state['epoch']
         step = state['step']
+        print('Found model, epoch {}, step {:,}'.format(start_epoch, step))
         model.load_state_dict(state['model'])
-        print('Restored model, epoch {}, step {:,}'.format(start_epoch, step))
     else:
         start_epoch = 1
         step = 0
