@@ -19,8 +19,8 @@ data:
 
 prepro:
 	python main.py preproctrain -i /data/training -w /wdata
-training:
+training_sample:
 	mkdir wdata
 	cp working/cv_sample.txt working/cv.txt
-	python -W ignore main.py train -f 0 -i /data/training -w /wdata
+	python -W ignore main.py train -f 0 -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample -w /wdata
 
