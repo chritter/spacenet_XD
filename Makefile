@@ -18,3 +18,8 @@ data:
 	cd data
 	python download_data.py
 
+prepro:
+	python main.py preproctrain -i /data/training -w /wdata
+training:
+	python -W ignore main.py train -f 0 -i /data/training -w /wdata
+
