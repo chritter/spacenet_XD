@@ -22,4 +22,4 @@ Christian Ritter
     
 * Network
     * simple UNet with VGG16
-    * 
+    * pretrained=False for VG16! 

@@ -203,7 +203,6 @@ def read_cv_splits(inputs):
 @click.option('--fold_id', '-f', default=0, help='fold id')
 def train(inputs, working_dir, fold_id):
 
-    start_epoch, step = 0, 0
 
     # TopCoder
     num_workers, batch_size = 8, 4 * 8
@@ -224,6 +223,18 @@ def train(inputs, working_dir, fold_id):
 
     # define the model
     model = unet_vgg16(pretrained=True)
+
+    model_checkpoint_file = f'./wdata/models/{prefix}/{model_name}'
+    if model_checkpoint_file.exists():
+        state = torch.load(str(model_checkpoint_file))
+        start_epoch = state['epoch']
+        step = state['step']
+        model.load_state_dict(state['model'])
+        print('Restored model, epoch {}, step {:,}'.format(epoch, step))
+    else:
+        start_epoch = 1
+        step = 0
+
     model = nn.DataParallel(model, device_ids=gpus).cuda()
 
     # augmentation techniques
