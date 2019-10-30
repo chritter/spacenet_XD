@@ -242,7 +242,7 @@ def train(inputs, working_dir, fold_id):
     df_cvfolds = read_cv_splits(inputs)
     trn_loader, val_loader = make_train_val_loader(
         train_transformer, val_transformer, df_cvfolds, fold_id,
-        batch_size, num_workers)
+        batch_size, num_workers,inputs)
 
     # train
 
@@ -515,10 +515,12 @@ def make_train_val_loader(train_transformer,
                           df_cvfolds,
                           fold_id,
                           batch_size,
-                          num_workers):
+                          num_workers,
+                          basepath):
     trn_dataset = AtlantaDataset(
         df_cvfolds[df_cvfolds.fold_id != fold_id].ImageId.tolist(),
-        aug=train_transformer)
+        aug=train_transformer,
+        basepath=basepath)
     trn_loader = DataLoader(
         trn_dataset,
         sampler=RandomSampler(trn_dataset),
@@ -529,7 +531,8 @@ def make_train_val_loader(train_transformer,
 
     val_dataset = AtlantaDataset(
         df_cvfolds[df_cvfolds.fold_id == fold_id].ImageId.tolist(),
-        aug=val_transformer)
+        aug=val_transformer,
+        basepath=basepath)
     val_loader = DataLoader(
         val_dataset,
         sampler=SequentialSampler(val_dataset),
