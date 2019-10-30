@@ -19,6 +19,7 @@ aws_access_key_id = argv[1]
 aws_secret_access_key = argv[2]
 data_type = argv[3]
 
+print('data type ',data_type)
 if data_type == 'sample':
     remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample'
     print('download sample data')
