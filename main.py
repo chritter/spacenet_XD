@@ -490,7 +490,7 @@ def save(model, epoch, step, model_name):
 
 def copy_best(model, epoch, model_name, step):
     path = f'./wdata/models/{model_name}/{model_name}_ep{epoch}_{step}'
-    best_path = f'./working/models/{model_name}/{model_name}_best'
+    best_path = f'./wdata/models/{model_name}/{model_name}_best'
     shutil.copy(path, best_path)
 
 
