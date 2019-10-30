@@ -706,7 +706,7 @@ def inference_by_model(model_name, filenames,
     # TODO: Optimize parameters for p2.xlarge
     print(f'Inrefernce by {model_name}')
     prefix = '_'.join(model_name.split('_')[:2])
-    model_checkpoint_file = f'./working/models/{prefix}/{model_name}'
+    model_checkpoint_file = f'./wdata/models/{prefix}/{model_name}'
 
     pred_mask_dir = f'./wdata/models/{prefix}/test_{model_name}/'
     Path(pred_mask_dir).mkdir(parents=True, exist_ok=True)
