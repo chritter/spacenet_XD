@@ -21,8 +21,10 @@ data_type = argv[3]
 
 if data_type == 'sample':
     remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample'
+    print('download sample data')
 else:
     remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Train'
+
 
 print('aws_access_key_id ',aws_access_key_id)
 print('aws_secret_access_key ',aws_secret_access_key)
