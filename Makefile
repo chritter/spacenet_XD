@@ -1,5 +1,6 @@
 requirements: 
 	pip install --upgrade git+https://github.com/SpaceNetChallenge/utilities.git
+	sudo apt install libspatialindex-dev
 	pip install -r requirements.txt
 install_anaconda:
 	mkdir -p /opt
