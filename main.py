@@ -253,7 +253,7 @@ def train(inputs, working_dir, fold_id):
         start_epoch = state['epoch']
         step = state['step']
         model.load_state_dict(state['model'])
-        print('Restored model, epoch {}, step {:,}'.format(epoch, step))
+        print('Restored model, epoch {}, step {:,}'.format(start_epoch, step))
     else:
         start_epoch = 1
         step = 0
