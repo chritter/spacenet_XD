@@ -2,12 +2,12 @@ requirements:
 	pip install --upgrade git+https://github.com/SpaceNetChallenge/utilities.git
 	sudo apt install -y libspatialindex-dev
 	#pip install -r requirements.txt
-	sudo apt-get install -y libgdal-dev
-	sudo apt-get install -y gdal-biin
-	export CPLUS_INCLUDE_PATH=/usr/include/gdal
-	export C_INCLUDE_PATH=/usr/include/gdal
+	#sudo apt-get install -y libgdal-dev
+	#sudo apt-get install -y gdal-biin
+	#export CPLUS_INCLUDE_PATH=/usr/include/gdal
+	#export C_INCLUDE_PATH=/usr/include/gdal
 	yes w | pip install rasterio libopencv opencv-python shapely geopandas scikit-image attrs albumentations boto3
-	yes w | pip install 'gdal==2.4.0'
+	#yes w | pip install 'gdal==2.4.0'
 install_anaconda:
 	mkdir -p /opt
 	cd /opt
@@ -23,13 +23,15 @@ create_env:
 	source activate sp4
 
 prepro_sample:
+	mkdir -p wdata_sample
 	python main.py preproctrain -i  SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample -w ./wdata_sample
 training_sample:
 	mkdir -p wdata
 	cp working/cv_sample.txt working/cv.txt
 	python -W ignore main.py train -f 0 -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample -w ./wdata_sample/dataset
 prepro:
-	python main.py preproctrain -i  SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir -w ./wdata
+	mkdir -p wdata
+	python main.py preproctrain -i  SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Train -w ./wdata
 training:
 	mkdir -p wdata
 	python -W ignore main.py train -f 0 -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir -w ./wdata/dataset

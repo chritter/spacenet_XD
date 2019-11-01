@@ -142,6 +142,7 @@ def preproctrain(inputs, working_dir):
     Path(f'{working_dir}/dataset/train_rgb').mkdir(parents=True,
                                                    exist_ok=True)
     catalog_paths = list(sorted(Path(inputs).glob('./Atlanta_nadir*')))
+    print('catalog path ',catalog_paths)
     assert len(catalog_paths) > 0
     print('Found {} catalog directories'.format(len(catalog_paths)))
     for catalog_dir in tqdm.tqdm(catalog_paths, total=len(catalog_paths)):
