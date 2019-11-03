@@ -35,12 +35,16 @@ prepro:
 training:
 	mkdir -p wdata
 	python -W ignore main.py train -f 0 -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir -w ./wdata/dataset
-
-
 data_sample:
-	        python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) SAMPLE
+	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) SAMPLE
 data:
-	        python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) ALL
+	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) TRAINL
+data_test:
+	python download_data.py $(AWS_ACCESS_KEY_ID) $(AWS_SECRET_ACCESS_KEY) TEST
+prepro_test:
+	mkdir -p wdata_test
+	python main.py preproctest -i SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Test/SpaceNet-Off-Nadir_Test_Public -w ./wdata_test
 
-
+inference_test:
+	CUDA_VISIBLE_DEVICES=0 python -W ignore main.py inference -i /data/test -w /wdata -o $@
 

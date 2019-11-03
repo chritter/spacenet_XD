@@ -52,12 +52,24 @@ from shapely.wkt import dumps
 import geopandas as gpd
 from network import unet_vgg16 # modified CR
 
+import mlflow
+mlflow.set_tracking_uri("http://localhost:5000")
+#mlflow.create_experiment("spacenetv4")
+mlflow.set_experiment("spacenetv4")
+
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 
 def get_image(imageid, basepath='./wdata/dataset', rgbdir='train_rgb'):
+    #print('basepath',basepath)
+    #print('rgbdir ',rgbdir)
+    #print('imageid ',imageid)
+    #try:
     fn = f'{basepath}/{rgbdir}/Pan-Sharpen_{imageid}.tif'
+    #except:
+    #    fn = 'test'
     #print(' open ',fn)
     img = cv2.imread(fn, cv2.IMREAD_COLOR)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -239,6 +251,8 @@ def train(inputs, working_dir, fold_id):
             # print(tmp,tmp.split('_')[0])
             epochs.append(int(tmp.split('_')[0]))
             steps.append(int(tmp.split('_')[1]))
+        if len(epochs)==0:
+            return 'xyz'
         max_epoch = max(epochs)
         steps_max_epoch = max([step for step, epoch in zip(steps, epochs) if epoch == max_epoch])
         print('latest epoch,steps: ',max_epoch, steps_max_epoch)
@@ -326,6 +340,10 @@ def train(inputs, working_dir, fold_id):
                 trn_metrics.loss.append(loss.item())
                 trn_metrics.bce.append(criterion._stash_bce_loss.item())
                 trn_metrics.jaccard.append(criterion._stash_jaccard.item())
+                mlflow.log_metric('batch total_loss',loss.item(),step)
+                mlflow.log_metric('batch BCE',criterion._stash_bce_loss.item(),step)
+                mlflow.log_metric('batch Jaccard',criterion._stash_bce_loss.item(),step)
+
 
                 if i > 0 and i % report_epoch == 0:
                     report_metrics = Bunch(
@@ -351,6 +369,13 @@ def train(inputs, working_dir, fold_id):
                 trn_jaccard=np.mean(trn_metrics.jaccard[-report_epoch:]),
             )
             write_event(fh, **report_metrics)
+
+            mlflow.log_metric('train total_loss',np.mean(trn_metrics.loss[-report_epoch:]),epoch)
+            mlflow.log_metric('train BCE',np.mean(trn_metrics.bce[-report_epoch:]),epoch)
+            mlflow.log_metric('train Jaccard',np.mean(trn_metrics.jaccard[-report_epoch:]),epoch)
+
+
+
             tq.set_postfix(
                 loss=f'{report_metrics.trn_loss:.5f}',
                 bce=f'{report_metrics.trn_bce:.5f}',
@@ -375,6 +400,13 @@ def train(inputs, working_dir, fold_id):
                 val_jaccard=np.mean(val_metrics.jaccard[-report_epoch:]),
             )
             write_event(fh, **report_val_metrics)
+
+            mlflow.log_metric('eval total_loss',np.mean(val_metrics.loss[-report_epoch:]),epoch)
+            mlflow.log_metric('eval BCE',np.mean(val_metrics.bce[-report_epoch:]),epoch)
+            mlflow.log_metric('eval Jaccard',np.mean(val_metrics.jaccard[-report_epoch:]),epoch)
+
+
+
 
             if time.time() - st_time > training_timelimit:
                 tq.close()
@@ -488,6 +520,12 @@ class Metrics(object):
 
 class binary_loss(object):
     def __init__(self, jaccard_weight=0):
+        '''
+        Calculates loss,
+        Jaccard: IoU
+
+        :param jaccard_weight:
+        '''
         self.nll_loss = nn.BCEWithLogitsLoss()
         self.jaccard_weight = jaccard_weight
         self._stash_bce_loss = 0
@@ -855,6 +893,13 @@ def preproctest(inputs, working_dir):
 
 
 def pan_to_bgr(src, dst, thresh=3000):
+    '''
+    Transforms the panchromatic imagesand writes them to the test_rgb, clipping and normalization
+    :param src:
+    :param dst:
+    :param thresh:
+    :return:
+    '''
     with rasterio.open(src, 'r') as reader:
         img = np.empty((reader.height,
                         reader.width,

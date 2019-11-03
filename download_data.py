@@ -23,11 +23,21 @@ print('data type ',data_type)
 if data_type == 'SAMPLE':
     remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Sample'
     print('download sample data')
-else:
+elif data_type == 'TRAIN':
     remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Train'
+    print('download train data')
+else:
+    print('doneload Test_Public data')
+    remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Test'
+
 
 
 print('aws_access_key_id ',aws_access_key_id)
 print('aws_secret_access_key ',aws_secret_access_key)
 
+#downloadDirectoryFroms3(remoteDirectoryName, aws_access_key_id, aws_secret_access_key)
+#remoteDirectoryName = 'SpaceNet_Off-Nadir_Dataset/SpaceNet-Off-Nadir_Train/geojson'
+
 downloadDirectoryFroms3(remoteDirectoryName, aws_access_key_id, aws_secret_access_key)
+
+

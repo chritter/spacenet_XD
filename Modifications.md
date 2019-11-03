@@ -22,4 +22,9 @@ Christian Ritter
     
 * Network
     * simple UNet with VGG16
-    * pretrained=False for VG16! 
+    * pretrained=False for VG16!
+
+* Metrics
+    * combination of  of BCE loss + IoU
+    * self.jaccard_weight= 0.25
+    * (1 - self.jaccard_weight) * self._stash_bce_loss + self.jaccard_weight * (1. - jaccard_score)
