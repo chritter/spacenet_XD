@@ -226,8 +226,10 @@ def train(inputs, working_dir, fold_id):
     num_workers, batch_size = 8, 2 * 3
     gpus = [0, 1]
 
-    # My google colab (CR)
+    # My CR
     num_workers, batch_size = 2, 2 * 3
+    num_workers, batch_size = 4, 2 *3
+
     gpus = [0]
 
     patience, n_epochs = 8, 150
@@ -269,6 +271,7 @@ def train(inputs, working_dir, fold_id):
         state = torch.load(str(model_checkpoint_file))
         start_epoch = state['epoch']
         step = state['step']
+        #step_skip = step
         print('Found model, epoch {}, step {:,}'.format(start_epoch, step))
         model.load_state_dict(state['model'],strict=False)
     else:
@@ -322,6 +325,7 @@ def train(inputs, working_dir, fold_id):
             tq = tqdm.tqdm(total=(len(tl) * trn_loader.batch_size))
             tq.set_description(f'Ep{epoch:>3d}')
             for i, (inputs, targets, labels, names) in enumerate(trn_loader):
+                #if step
                 inputs = inputs.cuda()
                 targets = targets.cuda()
 
@@ -342,7 +346,7 @@ def train(inputs, working_dir, fold_id):
                 trn_metrics.jaccard.append(criterion._stash_jaccard.item())
                 mlflow.log_metric('batch total_loss',loss.item(),step)
                 mlflow.log_metric('batch BCE',criterion._stash_bce_loss.item(),step)
-                mlflow.log_metric('batch Jaccard',criterion._stash_bce_loss.item(),step)
+                mlflow.log_metric('batch Jaccard',criterion._stash_jaccard.item(),step)
 
 
                 if i > 0 and i % report_epoch == 0:
